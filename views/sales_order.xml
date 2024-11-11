@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <record id="sale_order_form_view_inherit" model="ir.ui.view">
+    <field name="name">sale.order.form.view.inherit</field>
+    <field name="model">sale.order</field>
+    <field name="inherit_id" ref="sale.view_order_form"/>
+    <field name="arch" type="xml">
+      <xpath expr="//header/field[@name='state']" position='replace'>
+        <field name="state" widget="statusbar" statusbar_visible="draft,sent,waiting,sale"/>
+      </xpath>
+      <xpath expr="//header" position='inside'>
+        <button name="action_quote_confirm" type="object" string="Validate the quote" invisible="state not in('waiting','sale')" states="sent"/>
+      </xpath>
+      <xpath expr="//header/button[@name='action_confirm'][2]" position="attributes">
+        <attribute name="invisible">state != 'draft' or state != 'waiting' </attribute>
+      </xpath>
+    </field>
+</odoo>
