@@ -1,13 +1,14 @@
-# -*- coding: UTF-8 -*-
-
 {
     'name': 'KSF Europe Sales',
     'version': '1.0',
+    'description':'KSF EUROPE process sale',
     'summary': 'KSF EU process',
     'category': 'Sales',
     'author': 'Hoang',
     'depends': ['sale'],
-    'data': [],
+    'data': [
+        'views/sale_order_views.xml',
+    ],
     'installable': True,
     'auto_install': True,
 }
