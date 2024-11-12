@@ -3,14 +3,19 @@ from odoo import models, fields
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
-    ​state = fields.Selection(selection_add=[('waiting', 'Waiting Payment')])
+    state = fields.Selection(selection_add=[('waiting', 'Waiting Payment'),('sale',)])
 
-    ​def action_quote_confirm(self):
-    for order in self:
-        is_immediate_payment = order.your_method_to_check_payment()  # Access `order` to check individually
-        if not is_immediate_payment:
-            super(SaleOrder, order).action_confirm()  # Confirm this specific order
-        else:
-            order.write({'state': 'waiting'})  # Set to waiting if immediate payment is needed
+    def action_confirm(self):
+        for order in self:
+            if order.payment_term_id.id != 1:
+                # If immediate payment is not required, proceed with the normal confirmation process
+                super(SaleOrder, order).action_confirm()
+            else:
+                # Otherwise, set the state to 'waiting'
+                order.write({'state': 'waiting'})
+        return True
 
-    return True
+    def action_payment_receive(self):
+        for order in self:
+            super(SaleOrder, order).action_confirm()
+        return True
